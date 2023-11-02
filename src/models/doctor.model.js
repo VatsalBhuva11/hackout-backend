@@ -1,0 +1,78 @@
+import mongoose from "mongoose";
+
+const doctorSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true,
+        unique: true,
+        min: 4,
+        default: null
+    },
+    DOB: {
+        type: String,
+        required: true
+    },
+    gender: {
+        type: String,
+        required: true
+    },
+    countryOfOrigin: {
+        type: String,
+        required: true
+    },
+    contact: {
+        type: Number,
+        required: false
+    },
+    specialization: {
+        type: String,
+        required: true,
+        default: null
+    },
+    securityQuestion: {
+        type: String, //or array of strings. (3 security questions)
+        required: true
+    },
+    securityAnswer: {
+        type: String,
+        required: true
+    },
+    medicalLicense: {
+        type: String, //filePath in s3.
+        required: true,
+        default: null
+    },
+    degree: {
+        type: String, //filePath in s3.
+        required: true,
+        default: null
+    },
+    publishments: {
+        type: Array,
+        required: false
+    },
+    identityProof: {
+        type: String,
+        required: true,
+        default: null
+    },
+    isVerified: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
+
+});
+
+const Doctor = mongoose.model('Doctor', doctorSchema);
+export default Doctor;
