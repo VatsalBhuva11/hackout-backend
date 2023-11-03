@@ -39,13 +39,9 @@ const doctorSchema = new mongoose.Schema({
         required: true,
         default: null
     },
-    securityQuestion: {
-        type: String, //or array of strings. (3 security questions)
-        required: true
-    },
-    securityAnswer: {
+    securityCode: {
         type: String,
-        required: true
+        default: null
     },
     medicalLicense: {
         type: String, //filePath in s3.

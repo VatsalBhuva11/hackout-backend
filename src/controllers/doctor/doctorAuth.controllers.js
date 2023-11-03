@@ -2,7 +2,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Upload } from "@aws-sdk/lib-storage";
 import { S3 } from "@aws-sdk/client-s3";
-import Doctor from "../models/doctor.model.js"
+import Doctor from "../../models/doctor.model.js"
+
 
 const s3 = new S3({
     region: process.env.S3_REGION,
@@ -24,12 +25,10 @@ const signup = async (req, res) => {
             countryOfOrigin,
             contact,
             specialization,
-            securityQuestion,
-            securityAnswer,
         } = req.body;
 
         
-        if (!name || !DOB || !email || !gender || !password || !countryOfOrigin || !specialization || !securityQuestion || !securityAnswer) {
+        if (!name || !DOB || !email || !gender || !password || !countryOfOrigin || !specialization) {
             res.status(400).send('All fields are required');
         }
         const checkExisting = await Doctor.findOne({ email })
@@ -37,6 +36,8 @@ const signup = async (req, res) => {
             res.status(400).send('Doctor already registered/pending verification');
         } else {
             const files = req.files; //object containing fieldName as key, array of files with that name as value.
+            console.log(files);
+            console.log(req.body);
             if (!files["medicalLicense"] || !files["degree"] || !files["identityProof"]) {
                 res.status(400).send("Please upload all the required documents marked with *");
             } else {
@@ -51,8 +52,6 @@ const signup = async (req, res) => {
                     countryOfOrigin,
                     contact,
                     specialization,
-                    securityQuestion,
-                    securityAnswer,
                 })
                 const fields = Object.keys(files); //fields = ["medicalLicense", "degree", "identityProof", "publishments"]
                 
@@ -112,7 +111,6 @@ const signup = async (req, res) => {
                         const uploadPromises = fileObjects.map(file => uploadFile(file));
                         console.log(uploadPromises)
                         await Promise.all(uploadPromises);
-                        console.log(uploadPromises)
                         console.log('All files uploaded successfully.');
     
                         fields.forEach(field => {
@@ -149,9 +147,9 @@ const login = async (req, res) => {
         const {
             email,
             password,
-            securityAnswer
+            securityCode
         } = req.body;
-        if (!email || !password || !securityAnswer) {
+        if (!email || !password || !securityCode) {
             res.status(400).send('All fields required');
         }
         //check if user exists in database
@@ -160,7 +158,7 @@ const login = async (req, res) => {
             //if verified, create and send a token
             if (!doctorExists.isVerified) {
                 res.status(401).send('Please wait for verification');
-            } else if (doctorExists.securityAnswer.toLowerCase() !== securityAnswer.toLowerCase()) {
+            } else if (doctorExists.securityCode !== securityCode) {
                 res.send("Invalid answer. Please try again.");
             } 
             else {

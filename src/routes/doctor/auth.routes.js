@@ -1,6 +1,6 @@
 import express from "express";
 import multer from 'multer';
-import doctor from "../../controllers/doctorAuth.controllers.js"
+import doctor from "../../controllers/doctor/doctorAuth.controllers.js"
 const router = express.Router();
 
 const storage = multer.memoryStorage(); // Store the file in memory
