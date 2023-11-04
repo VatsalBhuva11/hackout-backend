@@ -2,10 +2,10 @@ import { Upload } from "@aws-sdk/lib-storage";
 import { S3 } from "@aws-sdk/client-s3";
 
 const s3 = new S3({
-    region: process.env.S3_REGION,
+    region: process.env.AWS_REGION,
     credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY,
-        secretAccessKey: process.env.AWS_SECRET_KEY
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
     }
 });
 
@@ -28,7 +28,7 @@ const uploadFile = async (req, res, next) => {
         const filePath = `Doctor/d${req.id}/${currTime}_${filename}`;
         //configuring parameters
         const params = {
-            Bucket: process.env.S3_BUCKET,
+            Bucket: process.env.AWS_BUCKET,
             Key: filePath,
             Body: file.buffer
             
