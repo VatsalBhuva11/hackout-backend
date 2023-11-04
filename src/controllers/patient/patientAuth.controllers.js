@@ -15,7 +15,7 @@ const signup = async (req, res) => {
         } = req.body;
         const DOB = new Date(req.body.DOB).toLocaleDateString('en-US'); // dd/mm/yyyy
         
-        if (!name || !DOB || !email || !gender || !password || !countryOfOrigin) {
+        if (!name || !DOB || !email || !gender || !password) {
             res.status(400).send('All fields are required');
         }
     
