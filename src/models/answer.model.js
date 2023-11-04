@@ -18,7 +18,15 @@ const answerSchema = new mongoose.Schema({
         required: true,
         default: false,
     },
-    upvotes: {
+    upvotes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: {
+            type: String,
+            enum: ['Patient', 'Doctor']
+        },
+        default: null
+    }],
+    upvotesCount: {
         type: Number,
         default: 0
     }

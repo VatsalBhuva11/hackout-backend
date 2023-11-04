@@ -1,5 +1,6 @@
 import Post from "../../models/post.model.js";
 import Patient from "../../models/patient.model.js";
+import Answer from "../../models/answer.model.js";
 
 const createPost = async (req, res) => {
     try {
@@ -32,4 +33,26 @@ const createPost = async (req, res) => {
 
 }
 
-export default createPost;
+const upvoteAnswer = async (req, res) => {
+    const answerId = req.params.answerId;
+    const id = req.id;
+    const answer = await Answer.findById(answerId)
+    if (!answer) {
+        res.status(404).send("No such answer found.")
+    } else {
+        if (answer.upvotes.some(objId => objId.equals(id))) {
+            res.send("Cannot upvote the answer again");
+        } else if (answer._id === id) {
+            res.send("Cannot upvote your own answer");
+        } else {
+            answer.upvotesCount += 1;
+            answer.upvotes.push(id);
+            answer.save()
+                .then(updatedAns => res.status(200).json(updatedAns))
+                .catch(err => res.send("Error occurred while upvoting answer: ", err));
+        }
+    }
+
+}
+
+export { createPost, upvoteAnswer };

@@ -10,7 +10,7 @@ const generator = (role) => {
                 const payload = jwt.verify(token, process.env.JWT_SECRET_KEY)
                 const id = payload.id;
                 req.id = id;
-                if (payload.role !== role) {
+                if (!role.some(r => r === payload.role)) {
                     res.status(401).send("Unauthorized access.");
                 } else {
                     req.role = role; //Doctor, Patient, Admin
@@ -24,8 +24,9 @@ const generator = (role) => {
     }
 }
 
-const patientAuthMiddleware = generator("Patient");
-const doctorAuthMiddleware = generator("Doctor");
-const adminAuthMiddleware = generator("Admin");
+const patientAuthMiddleware = generator(["Patient"]);
+const doctorAuthMiddleware = generator(["Doctor"]);
+const adminAuthMiddleware = generator(["Admin"]);
+const patientOrDoctorAuthMiddleware = generator(["Doctor", "Patient"])
 
-export { patientAuthMiddleware, doctorAuthMiddleware, adminAuthMiddleware };
+export { patientAuthMiddleware, doctorAuthMiddleware, adminAuthMiddleware, patientOrDoctorAuthMiddleware };
