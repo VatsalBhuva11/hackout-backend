@@ -66,7 +66,11 @@ const doctorSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
-    }
+    },
+    answers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Answer'
+    }]
 
 });
 

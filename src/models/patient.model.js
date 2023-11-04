@@ -28,6 +28,10 @@ const patientSchema = new mongoose.Schema({
         type: Number,
         required: false
     },
+    posts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post'
+    }],
     isAdmin: {
         type: Boolean,
         required: true,
