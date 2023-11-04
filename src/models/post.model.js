@@ -18,8 +18,11 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Answer',
         default: null
-    }]
-    
+    }],
+    solved: {
+        type: Boolean,
+        default: false 
+    }
 
 
 });

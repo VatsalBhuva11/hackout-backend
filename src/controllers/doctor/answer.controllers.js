@@ -16,7 +16,8 @@ const createAnswer = async (req, res) => {
                 res.status(404).send("Post not found. Please check agian.")
             } else {
                 const answer = await Answer.create({
-                    doctor,
+                    commenter: doctor,
+                    commenterType: "Doctor",
                     post,
                     content
                 })

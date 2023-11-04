@@ -34,7 +34,7 @@ const patientSchema = new mongoose.Schema({
     }],
     answers: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Answer'
+        ref: 'Answer',
     }],
     isAdmin: {
         type: Boolean,

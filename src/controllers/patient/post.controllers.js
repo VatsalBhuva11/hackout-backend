@@ -1,6 +1,5 @@
 import Post from "../../models/post.model.js";
 import Patient from "../../models/patient.model.js";
-import Answer from "../../models/answer.model.js";
 
 const createPost = async (req, res) => {
     try {
@@ -33,26 +32,33 @@ const createPost = async (req, res) => {
 
 }
 
-const upvoteAnswer = async (req, res) => {
-    const answerId = req.params.answerId;
-    const id = req.id;
-    const answer = await Answer.findById(answerId)
-    if (!answer) {
-        res.status(404).send("No such answer found.")
+
+const viewPost = async (req, res) => {
+    const postId = req.params.postId;
+    const post = await Post.findById(postId);
+    if (!post) {
+        res.status(404).send("Post not found, please check again.")
     } else {
-        if (answer.upvotes.some(objId => objId.equals(id))) {
-            res.send("Cannot upvote the answer again");
-        } else if (answer._id === id) {
-            res.send("Cannot upvote your own answer");
+        const creator = post.patient;
+        console.log(creator);
+        console.log(req.id);
+        if (creator.toString() !== req.id) {
+            res.send("Cannot access the posts of another patient.")
         } else {
-            answer.upvotesCount += 1;
-            answer.upvotes.push(id);
-            answer.save()
-                .then(updatedAns => res.status(200).json(updatedAns))
-                .catch(err => res.send("Error occurred while upvoting answer: ", err));
+            res.status(200).json(post);
         }
     }
-
 }
 
-export { createPost, upvoteAnswer };
+const viewSolvedPosts = async (req, res) => {
+    const posts = await Post.find(
+        {
+            solved: true,
+            patient: req.id
+        }
+    );
+    res.status(200).json(posts);
+}
+
+
+export { createPost, viewPost, viewSolvedPosts };

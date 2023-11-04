@@ -1,9 +1,14 @@
 import mongoose from "mongoose";
 
 const answerSchema = new mongoose.Schema({
-    doctor: {
+    commenterType: {
+        type: String,
+        enum: ['Patient', 'Doctor'], // Allowed values
+        required: true
+    },
+    commenter: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Doctor'
+        required: true
     },
     post :{
         type: mongoose.Schema.Types.ObjectId,
