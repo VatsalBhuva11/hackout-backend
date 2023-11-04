@@ -6,7 +6,7 @@ const uploadPrompt = async (req, res) => {
         res.send("No input prompt detected.");
     } else {
         const response = await axios({
-            url: "http://localhost:8000/output",
+            url: "https://hackout-ml-model.onrender.com/output",
             method: "GET",
             data: {
                 prompt: inp
