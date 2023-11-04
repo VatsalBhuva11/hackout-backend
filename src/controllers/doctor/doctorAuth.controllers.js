@@ -99,27 +99,21 @@ const signup = async (req, res) => {
                     } catch (err) {
                         console.log(err);
                         console.log("\n\n")
-                        res.send("Some error occured while uploading files,\n",err);
                     }
                 }
                 
                 async function uploadAllFiles() {
-                    try {
-                        const uploadPromises = fileObjects.map(file => uploadFile(file));
-                        console.log(uploadPromises)
-                        await Promise.all(uploadPromises);
-                        console.log('All files uploaded successfully.');
-    
-                        fields.forEach(field => {
-                            newDoctor[field] = fileUploadPaths[field];
-                        })
-                        const savedDoc = await newDoctor.save();
-                        console.log("Successfully added doctor in database.")
-                        res.status(200).json(savedDoc);
-                    } catch (err) {
-                        console.log(err);
-                        res.status(400).send("Error occurred: ", err);
-                    }
+                    const uploadPromises = fileObjects.map(file => uploadFile(file));
+                    console.log(uploadPromises)
+                    await Promise.all(uploadPromises);
+                    console.log('All files uploaded successfully.');
+
+                    fields.forEach(field => {
+                        newDoctor[field] = fileUploadPaths[field];
+                    })
+                    const savedDoc = await newDoctor.save();
+                    console.log("Successfully added doctor in database.")
+                    res.status(200).json(savedDoc);
                 }
                   
                 uploadAllFiles();
