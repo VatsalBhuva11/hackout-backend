@@ -4,7 +4,6 @@ const patientSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique: true
     },
     email: {
         type: String,
@@ -14,7 +13,6 @@ const patientSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        unique: true,
         min: 4,
         default: null
     },
@@ -39,6 +37,8 @@ const patientSchema = new mongoose.Schema({
         required: true,
         default: false
     }
+
+
 });
 
 const Patient = mongoose.model('Patient', patientSchema);

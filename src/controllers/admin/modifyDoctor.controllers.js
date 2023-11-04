@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 import randomstring from "randomstring";
 import handlebars from "handlebars";
 import fs from "fs";
-import Doctor from "../models/doctor.model.js";
+import Doctor from "../../models/doctor.model.js";
 
 
 const verifyDoctor = async (req, res) => {

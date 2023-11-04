@@ -162,7 +162,7 @@ const login = async (req, res) => {
                 res.send("Invalid answer. Please try again.");
             } 
             else {
-                const token = jwt.sign({ id: doctorExists._id }, process.env.JWT_SECRET_KEY, { expiresIn: "2h" });
+                const token = jwt.sign({ id: doctorExists._id , role: "Doctor"}, process.env.JWT_SECRET_KEY, { expiresIn: "2h" });
                 doctorExists.token = token;
                 doctorExists.password = undefined;
     

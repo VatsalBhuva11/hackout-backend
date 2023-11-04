@@ -8,11 +8,14 @@ const generator = (role) => {
         } else {
             try {
                 const payload = jwt.verify(token, process.env.JWT_SECRET_KEY)
-                // Changes here
                 const id = payload.id;
                 req.id = id;
-                req.role = role; //Doctor, Patient
-                next();
+                if (payload.role !== role) {
+                    res.status(401).send("Unauthorized access.");
+                } else {
+                    req.role = role; //Doctor, Patient, Admin
+                    next();
+                }
             } catch (err) {
                 console.log(err);
                 res.status(500).send("Error while verifying token.");
@@ -20,7 +23,9 @@ const generator = (role) => {
         }
     }
 }
+
 const patientAuthMiddleware = generator("Patient");
 const doctorAuthMiddleware = generator("Doctor");
+const adminAuthMiddleware = generator("Admin");
 
-export { patientAuthMiddleware, doctorAuthMiddleware };
+export { patientAuthMiddleware, doctorAuthMiddleware, adminAuthMiddleware };

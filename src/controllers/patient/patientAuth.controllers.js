@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import Patient from "../models/patient.model.js"
+import Patient from "../../models/patient.model.js"
 
 
 const signup = async (req, res) => {
@@ -14,7 +14,6 @@ const signup = async (req, res) => {
             contact,
         } = req.body;
         const DOB = new Date(req.body.DOB).toLocaleDateString('en-US'); // dd/mm/yyyy
-        console.log(DOB);
         
         if (!name || !DOB || !email || !gender || !password || !countryOfOrigin) {
             res.status(400).send('All fields are required');
@@ -35,8 +34,6 @@ const signup = async (req, res) => {
                 countryOfOrigin,
                 contact
             })
-            var token = jwt.sign({ id: newUser._id, role: "Patient" }, process.env.JWT_SECRET_KEY, { expiresIn: "2h" });
-            newUser.token = token;
             console.log("Successfully created new user!");
             res.status(200).json(newUser);
         }
@@ -59,7 +56,7 @@ const login = async (req, res) => {
         const userExists = await Patient.findOne({ email })
         if (userExists && (await bcrypt.compare(password, userExists.password))) {
             //if verified, create and send a token
-            const token = jwt.sign({ id: userExists._id }, process.env.JWT_SECRET_KEY, { expiresIn: "2h" });
+            const token = jwt.sign({ id: userExists._id , role: "Patient"}, process.env.JWT_SECRET_KEY, { expiresIn: "2h" });
             userExists.token = token;
             userExists.password = undefined;
             //send token to user cookie
