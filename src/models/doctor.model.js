@@ -26,10 +26,6 @@ const doctorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    countryOfOrigin: {
-        type: String,
-        required: true
-    },
     contact: {
         type: Number,
         required: false

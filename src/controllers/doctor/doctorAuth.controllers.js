@@ -18,17 +18,15 @@ const signup = async (req, res) => {
     try {
         const {
             name,
-            DOB,
             email,
             gender,
             password,
-            countryOfOrigin,
             contact,
             specialization,
         } = req.body;
-
+        const DOB = new Date(req.body.DOB).toLocaleDateString('en-US'); // dd/mm/yyyy
         
-        if (!name || !DOB || !email || !gender || !password || !countryOfOrigin || !specialization) {
+        if (!name || !DOB || !email || !gender || !password || !specialization) {
             res.status(400).send('All fields are required');
         }
         const checkExisting = await Doctor.findOne({ email })
@@ -49,7 +47,6 @@ const signup = async (req, res) => {
                     password: hashedPassword,
                     DOB,
                     gender,
-                    countryOfOrigin,
                     contact,
                     specialization,
                 })
@@ -102,7 +99,7 @@ const signup = async (req, res) => {
                     } catch (err) {
                         console.log(err);
                         console.log("\n\n")
-                        res.send("Some error occured while uploading files");
+                        res.send("Some error occured while uploading files,\n",err);
                     }
                 }
                 
@@ -116,17 +113,12 @@ const signup = async (req, res) => {
                         fields.forEach(field => {
                             newDoctor[field] = fileUploadPaths[field];
                         })
-                        newDoctor.save()
-                        .then(savedDoc => {
-                            console.log("Successfully added doctor in database.")
-                            res.status(200).json(savedDoc);
-                        })
-                        .catch(err => {
-                            res.status(400).send('Error while adding doctor:', err);
-                        })
+                        const savedDoc = await newDoctor.save();
+                        console.log("Successfully added doctor in database.")
+                        res.status(200).json(savedDoc);
                     } catch (err) {
                         console.log(err);
-                        res.send("Error occurred: ", err);
+                        res.status(400).send("Error occurred: ", err);
                     }
                 }
                   
