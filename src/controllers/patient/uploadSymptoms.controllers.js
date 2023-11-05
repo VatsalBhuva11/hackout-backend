@@ -14,7 +14,7 @@ const uploadPrompt = async (req, res) => {
             headers: {'Content-Type': 'application/json'}
         })
         console.log(response.data);
-        res.send(response.data);
+        res.status(200).json({output: response.data});
     }
 }
 
