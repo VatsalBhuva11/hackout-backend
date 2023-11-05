@@ -65,10 +65,8 @@ const login = async (req, res) => {
                 //Only server can manipulate this cookie
                 httpOnly: true
             }
-            res.status(200).cookie("token", token, options).json({
-                success: true,
-                data: userExists
-            })
+            res.status(200).cookie("token", token, options)
+            .redirect("https://d2p-frontend.onrender.com/patient/dashboard")
         }
 
         else if (!userExists)
